@@ -30,7 +30,6 @@
   transition: top 10s, left 10s;
   /* transition-timing-function: linear; */
 } 
-
 /* .bats.right       { background-position: -200px -160px; } 
 .bats.right.flap  { background-position: -300px -160px; }
 .bats             { background-position: -100px -160px; }
