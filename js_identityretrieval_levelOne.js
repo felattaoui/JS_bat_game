@@ -1,81 +1,76 @@
 "use strict";
 
+var body = $("body");
 
-var body = $('body');
-
-
-var interpolations = [{
-
+var interpolations = [
+  {
     backGPosx: "0%",
     backGPosy: "0%",
-
   },
   {
     backGPosx: "48%",
     backGPosy: "4%",
-
   },
   {
     backGPosx: "94%",
     backGPosy: "0%",
-
   },
 
   {
     backGPosx: "140%",
     backGPosy: "0%",
-
   },
-]
+];
 
 var prevDivaA = undefined;
 var prevDivaB = undefined;
+var speed = 30;
 
-// ---------------------------Code pour le score - plus tard : A NE PAS SUPPRIMER ---------------- 
+// ---------------------------Code pour le score - plus tard : A NE PAS SUPPRIMER ----------------
 //   var calculScore = function () {
 //     var ciblageDivScore = document.getElementById('conteneurCounterScore');
 //     var contenuHTML = document.getElementById('conteneurCounterScore').innerHTML;
-
 
 //     var compteur = Number(contenuHTML);
 
 //       ciblageDivScore.innerHTML= compteur+1;
 // }
-// ---------------------------Code pour le score - plus tard : A NE PAS SUPPRIMER ---------------- 
+// ---------------------------Code pour le score - plus tard : A NE PAS SUPPRIMER ----------------
 
-
-
-
-// ---------------------------Fonctions ---------------- 
+// ---------------------------Fonctions ----------------
 
 function createBats() {
-
-  var bats = $('<div>').addClass('bats');
-  $('#conteneur').append(bats);
+  var bats = $("<div>").addClass("bats");
+  $("#conteneur").append(bats);
   var indice = 0;
   var i;
 
-  setInterval(function () {
+  //let myBats = document.getElementsByClassName("bats");
+  //myBats[0].style.borderColor = "red";
 
-    for (i = 0; i < document.getElementsByClassName('bats').length; i++) {
-      this.document.getElementsByClassName('bats')[i].style.backgroundPositionX = interpolations[indice].backGPosx;
-      this.document.getElementsByClassName('bats')[i].style.backgroundPositionY = interpolations[indice].backGPosy;
+  setInterval(function () {
+    for (i = 0; i < document.getElementsByClassName("bats").length; i++) {
+      this.document.getElementsByClassName("bats")[
+        i
+      ].style.backgroundPositionX = interpolations[indice].backGPosx;
+      this.document.getElementsByClassName("bats")[
+        i
+      ].style.backgroundPositionY = interpolations[indice].backGPosy;
       indice++;
       if (indice > 3) {
         indice = 0;
-      };
+      }
     }
-  }, 500)
+  }, 500);
 
   setInterval(function () {
-    moveBats(bats)
-  }, 30)
+    moveBats(bats);
+  }, speed);
 
   bats.click(function () {
     shootBats(bats);
-  })
+  });
 }
-
 
 var idInterval;
 
@@ -92,55 +87,56 @@ function jouer() {
         body.empty();
         jouer();
       }
-    }, 1000)
+    }, 1000);
   }
 }
 jouer();
 
-
 function shootBats(chauveS) {
-  chauveS.addClass('shot');
+  chauveS.addClass("shot");
   setTimeout(function () {
     chauveS.remove();
     // console.log ("je suis la morte dans SHOOT",chauveS)
-    if ($('.bats').length === 0) {
+    if ($(".bats").length === 0) {
       // console.log($('.bats'))
-      clearInterval(idInterval)
-      alert('Gagné');
+      clearInterval(idInterval);
+      alert("Gagné");
       jouer();
-
     }
-  }, 100)
+  }, 100);
 }
 
-function intersection_boxes(rect1, rect2){
-  var overlap = false
-  if (rect1.x < rect2.x + rect2.width &&
+function intersection_boxes(rect1, rect2) {
+  var overlap = false;
+  if (
+    rect1.x < rect2.x + rect2.width &&
     rect1.x + rect1.width > rect2.x &&
     rect1.y < rect2.y + rect2.height &&
-    rect1.height + rect1.y > rect2.y) {
-      overlap = true
-}
-return overlap
+    rect1.height + rect1.y > rect2.y
+  ) {
+    overlap = true;
+  }
+  return overlap;
 }
 
 function moveBats(chauveS) {
-  var randomLeft = Math.random() * (document.getElementById('conteneur').clientWidth);
-  var randomTop = Math.random() * (document.getElementById('conteneur').clientHeight);
+  var div1 = document.getElementsByClassName("bats")[0];
+  var div2 = document.getElementsByClassName("bats")[1];
+
+  var previousDivA = div1;
+  var previousDivB = div2;
+
+  var randomLeft =
+    Math.random() * document.getElementById("conteneur").clientWidth;
+  var randomTop =
+    Math.random() * document.getElementById("conteneur").clientHeight;
 
   chauveS.css({
     left: randomLeft,
     top: randomTop,
   });
-
-
-  var height = 66;
-  var width = 46;
-  var div1 = document.getElementsByClassName('bats')[0];
-  var div2 = document.getElementsByClassName('bats')[1];
-  var div3 = document.getElementsByClassName('bats')[2];
   var comparaisonCollisionDivs = function (divA, divB, chauveS) {
-    if (!divA || !divB ) return;
+    if (!divA || !divB) return;
     var infoBat = divA.getBoundingClientRect();
     var divaA = {
       top: infoBat.top,
@@ -151,7 +147,7 @@ function moveBats(chauveS) {
       width: infoBat.width,
       x: infoBat.x,
       y: infoBat.y,
-    }
+    };
 
     var infoBat_ = divB.getBoundingClientRect();
     var divaB = {
@@ -163,32 +159,31 @@ function moveBats(chauveS) {
       width: infoBat_.width,
       x: infoBat_.x,
       y: infoBat_.y,
-    }
+    };
 
-    const overlap = intersection_boxes(divaA, divaB)
-    if (overlap){
-      if (prevDivaA !== undefined && prevDivaB !== undefined){
-        /*chauveS.css({
-          left: randomLeft,
-          top: randomTop,
-          });*/
-          divA = prevDivaA
-          divB = prevDivaB
+    const overlap = intersection_boxes(divaA, divaB);
+    if (overlap) {
+      console.log("overlap");
+      if (prevDivaA !== undefined && prevDivaB !== undefined) {
+        var infoBat1 = previousDivA.getBoundingClientRect();
+        var infoBat2 = previousDivB.getBoundingClientRect();
 
-          var randomLeft = Math.random() * (document.getElementById('conteneur').clientWidth);
-          var randomTop = Math.random() * (document.getElementById('conteneur').clientHeight);
-          
-          chauveS.css({
-            left: randomLeft,
-            top: randomTop,
-          })
-        }
+        let factLeft =
+          Math.abs(infoBat1.left) > Math.abs(infoBat2.left) ? -1 : 1;
+        let factTop = Math.abs(infoBat1.top) > Math.abs(infoBat2.top) ? -1 : 1;
+        $(".bats:first-child").css({
+          left: infoBat1.left + divaA.width,
+          top: infoBat1.top + divaA.height,
+        });
+
+        $(".bats:nth-child(2)").css({
+          left: factLeft * infoBat1.left + divaA.width,
+          top: factTop * infoBat1.top + divaA.height,
+        });
+      }
     }
     prevDivaA = divA;
     prevDivaB = divB;
-
-
-  }
+  };
   comparaisonCollisionDivs(div1, div2, chauveS);
-
 }
