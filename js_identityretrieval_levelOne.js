@@ -172,13 +172,13 @@ function moveBats(chauveS) {
           Math.abs(infoBat1.left) > Math.abs(infoBat2.left) ? -1 : 1;
         let factTop = Math.abs(infoBat1.top) > Math.abs(infoBat2.top) ? -1 : 1;
         $(".bats:first-child").css({
-          left: infoBat1.left + divaA.width,
-          top: infoBat1.top + divaA.height,
+          left: infoBat1.left,
+          top: infoBat1.top,
         });
 
         $(".bats:nth-child(2)").css({
-          left: factLeft * infoBat1.left + divaA.width,
-          top: factTop * infoBat1.top + divaA.height,
+          left: factLeft * infoBat1.left,
+          top: factTop * infoBat1.top,
         });
       }
     }
